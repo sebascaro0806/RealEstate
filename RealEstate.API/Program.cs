@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RealEstate.Application.Interfaces;
+using RealEstate.Application.Services;
 using RealEstate.Domain.Interfaces;
 using RealEstate.Infrastructure;
 using RealEstate.Infrastructure.Context;
@@ -17,6 +18,9 @@ builder.Services.AddSwaggerGen();
 // Register services and repository
 builder.Services.AddTransient<IBuildingPropertyService, BuildingPropertyService>();
 builder.Services.AddTransient<IBuildingPropertyRepository, BuildingPropertyRepository>();
+
+builder.Services.AddTransient<IOwnerService, OwnerService>();
+builder.Services.AddTransient<IOwnerRepository, OwnerRepository>();
 
 // Register database services
 builder.Services.RegisterServices(builder.Configuration);

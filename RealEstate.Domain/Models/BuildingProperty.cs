@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RealEstate.Domain.Models
 {
@@ -13,6 +14,14 @@ namespace RealEstate.Domain.Models
 
         public string CodeInternal { get; set; }
 
-        public int Year { get; set; } 
+        public int Year { get; set; }
+
+        [ForeignKey("Owner")]
+        public Guid OwnerId { get; set; }
+
+        public virtual Owner Owner { get; set; }
+
+        public virtual BuildingPropertyImage BuildingPropertyImage { get; set; }
+
     }
 }
