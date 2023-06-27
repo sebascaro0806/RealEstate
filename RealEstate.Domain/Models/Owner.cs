@@ -2,6 +2,9 @@
 
 namespace RealEstate.Domain.Models
 {
+    /// <summary>
+    /// Represents an owner of a building property.
+    /// </summary>
     public class Owner
     {
         [Key]

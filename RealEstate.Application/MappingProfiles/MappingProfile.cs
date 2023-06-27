@@ -5,8 +5,15 @@ using RealEstate.Domain.Models;
 
 namespace RealEstate.Application.MappingProfiles
 {
-    public  class MappingProfile : Profile
+
+    /// <summary>
+    /// Represents a mapping profile for AutoMapper.
+    /// </summary>
+    public class MappingProfile : Profile
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MappingProfile"/> class.
+        /// </summary>
         public MappingProfile()
         {
             CreateMap<Owner, OwnerDTO>();

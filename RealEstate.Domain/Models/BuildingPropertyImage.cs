@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RealEstate.Domain.Models
 {
+    /// <summary>
+    /// Represents an image associated with a building property.
+    /// </summary>
     public class BuildingPropertyImage
     {
         [Key]

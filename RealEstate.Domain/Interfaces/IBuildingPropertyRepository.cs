@@ -2,9 +2,34 @@
 
 namespace RealEstate.Domain.Interfaces
 {
+    /// <summary>
+    /// Represents the repository interface for managing building properties.
+    /// </summary>
     public interface IBuildingPropertyRepository
     {
-        public Task CreateBuildingProperty(BuildingProperty buildingProperty);
+        /// <summary>
+        /// Retrieves a building property by its unique identifier.
+        /// </summary>
+        /// <param name="propertyId">The unique identifier of the building property.</param>
+        /// <returns>The building property with the specified identifier, or null if not found.</returns>
+        public Task<BuildingProperty> GetBuildingPropertyById(Guid propertyId);
+
+        /// <summary>
+        /// Retrieves all building properties.
+        /// </summary>
+        /// <returns>A collection of all building properties.</returns>
         public Task<IEnumerable<BuildingProperty>> GetBuildingProperties();
+
+        /// <summary>
+        /// Updates a building property.
+        /// </summary>
+        /// <param name="buildingProperty">The building property to update.</param>
+        public Task UpdateBuildingProperty(BuildingProperty buildingProperty);
+
+        /// <summary>
+        /// Creates a new building property.
+        /// </summary>
+        /// <param name="buildingProperty">The building property to create.</param>
+        public Task CreateBuildingProperty(BuildingProperty buildingProperty);
     }
 }

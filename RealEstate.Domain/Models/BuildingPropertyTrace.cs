@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RealEstate.Domain.Models
 {
+    /// <summary>
+    /// Represents a trace of a building property sale.
+    /// </summary>
     public class BuildingPropertyTrace
     {
         [Key]

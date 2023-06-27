@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RealEstate.Domain.Models
 {
+    /// <summary>
+    /// Represents a building property.
+    /// </summary>
     public class BuildingProperty
     {
         [Key]

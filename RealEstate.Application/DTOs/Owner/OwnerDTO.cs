@@ -1,5 +1,8 @@
 ﻿namespace RealEstate.Application.DTOs.Owner
 {
+    /// <summary>
+    /// Represents a data transfer object (DTO) for an owner.
+    /// </summary>
     public class OwnerDTO
     {
         public Guid Id { get; set; }
