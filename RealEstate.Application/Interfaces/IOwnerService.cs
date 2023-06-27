@@ -1,9 +1,11 @@
-﻿using RealEstate.Domain.Models;
+﻿using RealEstate.Application.DTOs.Owner;
 
 namespace RealEstate.Application.Interfaces
 {
     public interface IOwnerService
     {
-        public Owner CreateOwner();
+        public Task<OwnerDTO> CreateOwner(CreateOwnerDTO owner);
+
+        public Task<IEnumerable<OwnerDTO>> GetOwners();
     }
 }

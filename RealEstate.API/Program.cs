@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using RealEstate.Application.Interfaces;
 using RealEstate.Application.Services;
 using RealEstate.Domain.Interfaces;
@@ -14,6 +13,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Register services and repository
 builder.Services.AddTransient<IBuildingPropertyService, BuildingPropertyService>();

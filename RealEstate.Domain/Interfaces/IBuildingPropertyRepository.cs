@@ -4,6 +4,6 @@ namespace RealEstate.Domain.Interfaces
 {
     public interface IBuildingPropertyRepository
     {
-        IEnumerable<BuildingProperty> GetBuildingProperties();
+        public Task<IEnumerable<BuildingProperty>> GetBuildingProperties();
     }
 }

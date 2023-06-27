@@ -13,9 +13,9 @@ namespace RealEstate.Application.Interfaces
         }
 
 
-        IEnumerable<BuildingProperty> IBuildingPropertyService.GetBuildingProperties()
+        public async Task<IEnumerable<BuildingProperty>> GetBuildingProperties()
         {
-            return _buildingPropertyRepository.GetBuildingProperties();
+            return await _buildingPropertyRepository.GetBuildingProperties();
         }
     }
 }

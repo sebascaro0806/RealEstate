@@ -4,6 +4,7 @@ namespace RealEstate.Domain.Interfaces
 {
     public interface IOwnerRepository
     {
-        public Owner CreateOwner();
+        public Task CreateOwner(Owner owner);
+        public Task<IEnumerable<Owner>> GetOwners();
     }
 }
