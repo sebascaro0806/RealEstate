@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using RealEstate.API.Middlewares;
 using RealEstate.Application.Interfaces;
 using RealEstate.Application.Services;
 using RealEstate.Domain.Interfaces;
@@ -8,13 +9,14 @@ using RealEstate.Infrastructure.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+// Register middleware
+builder.Services.AddScoped<ExceptionMiddleware>();
 
 // Register services and repository
 builder.Services.AddTransient<IBuildingPropertyService, BuildingPropertyService>();
@@ -25,7 +27,6 @@ builder.Services.AddTransient<IOwnerRepository, OwnerRepository>();
 
 // Register database services
 builder.Services.RegisterServices(builder.Configuration);
-
 
 builder.Services.AddCors(options =>
 {
@@ -51,10 +52,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthorization();
-
 app.UseCors("CorsPolicy");
-
 app.MapControllers();
-
 app.Run();

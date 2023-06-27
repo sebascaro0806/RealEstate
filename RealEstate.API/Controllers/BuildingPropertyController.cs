@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RealEstate.Application.DTOs.BuildingProperty;
 using RealEstate.Application.Interfaces;
 
 namespace RealEstate.API.Controllers
@@ -16,33 +17,33 @@ namespace RealEstate.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateProperty([FromBody] String propertyDTO)
+        public async Task<IActionResult> CreateProperty(CreateBuildingPropertyDTO propertyDTO)
         {
-            return Ok("Property created successfully");
+            return Ok(await _buildingPropertyService.CreateBuildingProperty(propertyDTO));
         }
 
         [HttpPost("{propertyId}/images")]
-        public IActionResult AddPropertyImage(int propertyId, [FromBody] String imageDTO)
+        public IActionResult AddPropertyImage(Guid propertyId, [FromBody] String imageDTO)
         {
             return Ok("Image added successfully");
         }
 
         [HttpPut("{propertyId}/price")]
-        public IActionResult ChangePropertyPrice(int propertyId, [FromBody] String priceDTO)
+        public IActionResult ChangePropertyPrice(Guid propertyId, decimal price)
         {
             return Ok("Price changed successfully");
         }
 
         [HttpPut("{propertyId}")]
-        public IActionResult UpdateProperty(int propertyId, [FromBody] String propertyDTO)
+        public IActionResult UpdateProperty(Guid propertyId, [FromBody] String propertyDTO)
         {
             return Ok("Property updated successfully");
         }
 
         [HttpGet]
-        public IActionResult GetProperties([FromQuery] String filterDTO)
+        public async Task<IActionResult> GetProperties([FromQuery] String filterDTO)
         {
-            return Ok(_buildingPropertyService.GetBuildingProperties());
+            return Ok(await _buildingPropertyService.GetBuildingProperties());
         }
     }
 }

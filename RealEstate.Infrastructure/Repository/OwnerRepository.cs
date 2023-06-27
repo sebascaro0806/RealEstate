@@ -16,7 +16,7 @@ namespace RealEstate.Infrastructure.Repository
 
         public async Task CreateOwner(Owner owner)
         {
-            await _context.AddAsync(owner);
+            await _context.Owners.AddAsync(owner);
             await _context.SaveChangesAsync();
         }
 

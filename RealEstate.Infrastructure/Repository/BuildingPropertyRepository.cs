@@ -14,6 +14,12 @@ namespace RealEstate.Infrastructure.Repository
             _context = context;
         }
 
+        public async Task CreateBuildingProperty(BuildingProperty buildingProperty)
+        {
+            await _context.BuildingProperties.AddAsync(buildingProperty);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<BuildingProperty>> GetBuildingProperties()
         {
             return await _context.BuildingProperties.ToListAsync();
