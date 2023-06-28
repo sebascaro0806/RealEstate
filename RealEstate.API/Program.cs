@@ -1,6 +1,7 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using RealEstate.API.Filters;
 using RealEstate.API.Middlewares;
+using RealEstate.API.Models;
 using RealEstate.Application.Interfaces;
 using RealEstate.Application.Services;
 using RealEstate.Domain.Interfaces;
@@ -10,18 +11,28 @@ using RealEstate.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add<ValidationExceptionFilter>();
-});
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            var errors = context.ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage)
+                .ToList();
+                
+            return new BadRequestObjectResult(new ErrorResponse
+            {
+                Message = "Model validation error",
+                Errors = errors
+            });
+        };
+    });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-// Register middleware
-builder.Services.AddScoped<ExceptionMiddleware>();
 
 // Register services and repository
 builder.Services.AddTransient<IBuildingPropertyService, BuildingPropertyService>();
@@ -57,9 +68,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseMiddleware<ExceptionMiddleware>();
-
+app.UseRouting();
 app.UseAuthorization();
 app.UseCors("CorsPolicy");
-app.MapControllers();
+app.UseExceptionMiddleware();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 app.Run();

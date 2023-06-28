@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Newtonsoft.Json;
 using RealEstate.API.Models;
 using System.Net;
 
@@ -7,17 +11,17 @@ namespace RealEstate.API.Middlewares
     /// <summary>
     /// Represents a middleware for handling exceptions in the RealEstateAPI.
     /// </summary>
-    public class ExceptionMiddleware : IMiddleware
+    public class ExceptionMiddleware
     {
-        private readonly ILogger _logger;
+        private readonly RequestDelegate _next;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExceptionMiddleware"/> class.
         /// </summary>
-        /// <param name="logger">The logger to log exception details.</param>
-        public ExceptionMiddleware(ILogger<ExceptionMiddleware> logger)
+        /// <param name="next">The RequestDelegate.</param>
+        public ExceptionMiddleware(RequestDelegate next)
         {
-            _logger = logger;
+            _next = next;
         }
 
         /// <summary>
@@ -25,25 +29,26 @@ namespace RealEstate.API.Middlewares
         /// </summary>
         /// <param name="context">The current HTTP context.</param>
         /// <param name="next">The delegate representing the next middleware in the pipeline.</param>
-        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+        public async Task InvokeAsync(HttpContext context, ILogger<ExceptionMiddleware> logger)
         {
             try
             {
-                _logger.LogInformation("Action execution started: {Method} - {ActionName}", context.Request.Method, 
+                logger.LogInformation("Action execution started: {Method} - {ActionName}", context.Request.Method,
                     context.Request.Path.Value?.ToLower());
 
-                await next(context);
+                await _next(context);
 
-                _logger.LogInformation("Action execution completed: {ActionName}", context.Request.Method);
+                logger.LogInformation("Action execution completed:  {Method} - {ActionName}", context.Request.Method,
+                    context.Request.Path.Value?.ToLower());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message, "An error occurred in the RealEstateAPI");
+                logger.LogError(ex.Message, "An error occurred in the RealEstateAPI");
 
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 context.Response.ContentType = "application/json";
 
-                var errorResponse = new Error
+                var errorResponse = new ErrorResponse
                 {
                     Message = "An error occurred in the RealEstateAPI"
                 };
@@ -51,6 +56,15 @@ namespace RealEstate.API.Middlewares
                 var json = JsonConvert.SerializeObject(errorResponse);
                 await context.Response.WriteAsync(json);
             }
+        }
+    }
+
+    public static class ExceptionMiddlewareExtensions
+    {
+        public static IApplicationBuilder UseExceptionMiddleware(
+            this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<ExceptionMiddleware>();
         }
     }
 }
