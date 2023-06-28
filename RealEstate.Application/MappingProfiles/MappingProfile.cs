@@ -23,6 +23,7 @@ namespace RealEstate.Application.MappingProfiles
 
             CreateMap<BuildingProperty, BuildingPropertyDTO>();
             CreateMap<BuildingPropertyDTO, BuildingProperty>();
+            CreateMap<BuildingPropertyImage, BuildingPropertyImageDTO>();
 
             CreateMap<CreateBuildingPropertyDTO, BuildingProperty>();
             CreateMap<UpdateBuildingPropertyDTO, BuildingProperty>();

@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RealEstate.Infrastructure.Context
 {
-    public class RealEstateDBConext : DbContext
+    public class RealEstateDBContext : DbContext
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RealEstateDBConext"/> class.
         /// </summary>
         /// <param name="options">The options for configuring the context.</param>
-        public RealEstateDBConext(DbContextOptions<RealEstateDBConext> options) : base(options)
+        public RealEstateDBContext(DbContextOptions<RealEstateDBContext> options) : base(options)
         { }
 
         /// <summary>

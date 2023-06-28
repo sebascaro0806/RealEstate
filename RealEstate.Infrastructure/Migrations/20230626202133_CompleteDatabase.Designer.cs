@@ -11,7 +11,7 @@ using RealEstate.Infrastructure.Context;
 
 namespace RealEstate.Infrastructure.Migrations
 {
-    [DbContext(typeof(RealEstateDBConext))]
+    [DbContext(typeof(RealEstateDBContext))]
     [Migration("20230626202133_CompleteDatabase")]
     partial class CompleteDatabase
     {

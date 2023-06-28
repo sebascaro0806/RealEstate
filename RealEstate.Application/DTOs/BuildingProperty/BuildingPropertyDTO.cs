@@ -1,4 +1,7 @@
-﻿namespace RealEstate.Application.DTOs.BuildingProperty
+﻿using RealEstate.Domain.Models;
+using System.ComponentModel.DataAnnotations;
+
+namespace RealEstate.Application.DTOs.BuildingProperty
 {
     /// <summary>
     /// Represents a data transfer object (DTO) for a building property.
@@ -12,5 +15,7 @@
         public string CodeInternal { get; set; }
         public int Year { get; set; }
         public Guid OwnerId { get; set; }
+
+        public BuildingPropertyImageDTO BuildingPropertyImage { get; set; }
     }
 }

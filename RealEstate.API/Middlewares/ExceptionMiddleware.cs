@@ -29,8 +29,11 @@ namespace RealEstate.API.Middlewares
         {
             try
             {
-                _logger.LogInformation("Action execution started: {Method} - {ActionName}", context.Request.Method, context.Request);
+                _logger.LogInformation("Action execution started: {Method} - {ActionName}", context.Request.Method, 
+                    context.Request.Path.Value?.ToLower());
+
                 await next(context);
+
                 _logger.LogInformation("Action execution completed: {ActionName}", context.Request.Method);
             }
             catch (Exception ex)

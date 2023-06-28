@@ -3,20 +3,20 @@ using RealEstate.Domain.Interfaces;
 using RealEstate.Domain.Models;
 using RealEstate.Infrastructure.Context;
 
-namespace RealEstate.Infrastructure.Repository
+namespace RealEstate.Infrastructure.Repositories
 {
     /// <summary>
     /// Repository implementation for managing building properties.
     /// </summary>
     public class BuildingPropertyRepository : IBuildingPropertyRepository
     {
-        private readonly RealEstateDBConext _context;
+        private readonly RealEstateDBContext _context;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BuildingPropertyRepository"/> class.
         /// </summary>
         /// <param name="context">The database context.</param>
-        public BuildingPropertyRepository(RealEstateDBConext context)
+        public BuildingPropertyRepository(RealEstateDBContext context)
         {
             _context = context;
         }
@@ -44,7 +44,9 @@ namespace RealEstate.Infrastructure.Repository
         /// <returns>A collection of building properties.</returns>
         public async Task<IEnumerable<BuildingProperty>> GetBuildingProperties()
         {
-            return await _context.BuildingProperties.ToListAsync();
+            return await _context.BuildingProperties
+                .Include(bp => bp.BuildingPropertyImage)
+                .ToListAsync();
         }
 
         /// <summary>

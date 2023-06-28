@@ -3,20 +3,20 @@ using RealEstate.Domain.Interfaces;
 using RealEstate.Domain.Models;
 using RealEstate.Infrastructure.Context;
 
-namespace RealEstate.Infrastructure.Repository
+namespace RealEstate.Infrastructure.Repositories
 {
     /// <summary>
     /// Repository implementation for managing owners.
     /// </summary>
     public class OwnerRepository : IOwnerRepository
     {
-        private readonly RealEstateDBConext _context;
+        private readonly RealEstateDBContext _context;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OwnerRepository"/> class.
         /// </summary>
         /// <param name="context">The database context.</param>
-        public OwnerRepository(RealEstateDBConext context)
+        public OwnerRepository(RealEstateDBContext context)
         {
             _context = context;
         }

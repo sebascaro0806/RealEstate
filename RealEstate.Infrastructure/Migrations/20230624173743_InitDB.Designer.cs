@@ -11,7 +11,7 @@ using RealEstate.Infrastructure.Context;
 
 namespace RealEstate.Infrastructure.Migrations
 {
-    [DbContext(typeof(RealEstateDBConext))]
+    [DbContext(typeof(RealEstateDBContext))]
     [Migration("20230624173743_InitDB")]
     partial class InitDB
     {

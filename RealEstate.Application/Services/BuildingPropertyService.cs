@@ -30,8 +30,8 @@ namespace RealEstate.Application.Interfaces
         /// <returns>A collection of building property DTOs.</returns>
         public async Task<IEnumerable<BuildingPropertyDTO>> GetBuildingProperties()
         {
-            List<BuildingProperty> owners = (await _buildingPropertyRepository.GetBuildingProperties()).ToList();
-            return _mapper.Map<List<BuildingPropertyDTO>>(owners);
+            List<BuildingProperty> buildingProperties = (await _buildingPropertyRepository.GetBuildingProperties()).ToList();
+            return _mapper.Map<List<BuildingPropertyDTO>>(buildingProperties);
         }
 
         /// <summary>

@@ -1,15 +1,20 @@
 using Microsoft.EntityFrameworkCore;
+using RealEstate.API.Filters;
 using RealEstate.API.Middlewares;
 using RealEstate.Application.Interfaces;
 using RealEstate.Application.Services;
 using RealEstate.Domain.Interfaces;
 using RealEstate.Infrastructure;
 using RealEstate.Infrastructure.Context;
-using RealEstate.Infrastructure.Repository;
+using RealEstate.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidationExceptionFilter>();
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -41,7 +46,7 @@ var app = builder.Build();
 // Create database migrations
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<RealEstateDBConext>();
+    var context = scope.ServiceProvider.GetRequiredService<RealEstateDBContext>();
     context.Database.Migrate();
 }
 
@@ -53,6 +58,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionMiddleware>();
+
 app.UseAuthorization();
 app.UseCors("CorsPolicy");
 app.MapControllers();

@@ -85,7 +85,8 @@ namespace RealEstate.API.Controllers
         [HttpPut("{propertyId}")]
         public async Task<IActionResult> UpdateBuildingProperty(Guid propertyId, UpdateBuildingPropertyDTO propertyDTO)
         {
-            return Ok("Property updated successfully");
+            await _buildingPropertyService.UpdateBuildingProperty(propertyId, propertyDTO);
+            return Ok();
         }
     }
 }

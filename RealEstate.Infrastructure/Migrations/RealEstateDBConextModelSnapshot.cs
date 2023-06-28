@@ -10,7 +10,7 @@ using RealEstate.Infrastructure.Context;
 
 namespace RealEstate.Infrastructure.Migrations
 {
-    [DbContext(typeof(RealEstateDBConext))]
+    [DbContext(typeof(RealEstateDBContext))]
     partial class RealEstateDBConextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

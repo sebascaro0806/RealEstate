@@ -19,12 +19,12 @@ namespace RealEstate.Infrastructure
         public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {
             // Configure the RealEstateDBConext with the specified connection string
-            services.AddDbContext<RealEstateDBConext>(options =>
+            services.AddDbContext<RealEstateDBContext>(options =>
             {
                 options.UseSqlServer(Environment.GetEnvironmentVariable("DB_ConnectionString"));
             });
 
-            services.AddTransient<RealEstateDBConext>();
+            services.AddTransient<RealEstateDBContext>();
 
             return services;
         }
