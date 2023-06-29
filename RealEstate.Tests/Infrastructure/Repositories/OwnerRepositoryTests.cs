@@ -1,7 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RealEstate.Domain.Models;
-using RealEstate.Infrastructure.Context;
-using RealEstate.Infrastructure.Repositories;
 
 namespace RealEstate.Tests.Infrastructure.Repositories
 {

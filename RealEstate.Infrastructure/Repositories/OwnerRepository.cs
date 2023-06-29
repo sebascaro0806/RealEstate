@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using RealEstate.Domain.Exceptions;
 using RealEstate.Domain.Interfaces;
 using RealEstate.Domain.Models;
 using RealEstate.Infrastructure.Context;
@@ -28,6 +30,24 @@ namespace RealEstate.Infrastructure.Repositories
         public async Task<IEnumerable<Owner>> GetOwners()
         {
             return await _context.Owners.ToListAsync();
+        }
+
+        /// <summary>
+        /// Retrieves owner by id.
+        /// </summary>
+        /// <param name="ownerId">The ownerId.</param>
+        /// <returns>A collection of owners.</returns>
+        public async Task<Owner> GetOwnerById(Guid ownerId)
+        {
+            var owner = await _context.Owners
+                .FirstOrDefaultAsync(bp => bp.Id == ownerId);
+
+            if (owner == null)
+            {
+                throw new NotFoundException($"The owner with the ID {ownerId} does not exist.");
+            }
+
+            return owner;
         }
 
         /// <summary>

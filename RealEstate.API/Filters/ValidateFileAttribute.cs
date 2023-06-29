@@ -37,13 +37,13 @@ namespace RealEstate.API.Filters
 
             if (!IsValidImage(file))
             {
-                AddValidationError(context, "Invalid image format. Allowed formats are: " + string.Join(", ", _allowedExtensions));
+                AddValidationError(context, $"Invalid image format. Allowed formats are: { string.Join(", ", _allowedExtensions) }");
                 return;
             }
 
             if (!IsFileSizeValid(file))
             {
-                AddValidationError(context, "File size exceeds the limit. Maximum file size allowed is " + _maxFileSizeMB + " MB.");
+                AddValidationError(context, $"File size exceeds the limit. Maximum file size allowed is { _maxFileSizeMB } MB.");
                 return;
             }
 

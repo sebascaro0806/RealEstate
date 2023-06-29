@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
 using RealEstate.API.Models;
 using System.Net;
+using RealEstate.Domain.Exceptions;
 
 namespace RealEstate.API.Middlewares
 {
@@ -40,6 +40,21 @@ namespace RealEstate.API.Middlewares
 
                 logger.LogInformation("Action execution completed:  {Method} - {ActionName}", context.Request.Method,
                     context.Request.Path.Value?.ToLower());
+            }
+            catch (NotFoundException ex)
+            {
+                logger.LogInformation(ex.Message);
+
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                context.Response.ContentType = "application/json";
+
+                var errorResponse = new ErrorResponse
+                {
+                    Message = ex.Message
+                };
+
+                var json = JsonConvert.SerializeObject(errorResponse);
+                await context.Response.WriteAsync(json);
             }
             catch (Exception ex)
             {

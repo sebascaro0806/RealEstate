@@ -23,6 +23,7 @@ namespace RealEstate.Application.DTOs.BuildingProperty
         public int Year { get; set; }
 
         [Required(ErrorMessage = "OwnerId is required")]
-        public Guid OwnerId { get; set; }
+        [GuidValidation(ErrorMessage = "OwnerId must be a valid Guid")]
+        public string OwnerId { get; set; }
     }
 }

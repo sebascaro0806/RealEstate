@@ -33,6 +33,11 @@ namespace RealEstate.Infrastructure.Context
         /// </summary>
         public DbSet<Owner> Owners { get; set; }
 
+        /// <summary>
+        /// Method used to configure the relationships between entities in the database model.
+        /// It overrides the OnModelCreating method of the base DbContext class.
+        /// </summary>
+        /// <param name="modelBuilder">ModelBuilder object used to configure the entities and relationships.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using RealEstate.Application.DTOs.BuildingProperty;
+using RealEstate.Domain.Filters;
 using RealEstate.Domain.Interfaces;
 using RealEstate.Domain.Models;
 using RealEstate.Infrastructure.ExternalServices.Storage;
@@ -12,6 +13,7 @@ namespace RealEstate.Application.Interfaces
     public class BuildingPropertyService : IBuildingPropertyService
     {
         private readonly IBuildingPropertyRepository _buildingPropertyRepository;
+        private readonly IOwnerRepository _ownerRepository;
         private readonly IStorageService _storageService;
         private readonly IMapper _mapper;
 
@@ -20,9 +22,14 @@ namespace RealEstate.Application.Interfaces
         /// </summary>
         /// <param name="buildingPropertyRepository">The building property repository.</param>
         /// <param name="mapper">The mapper.</param>
-        public BuildingPropertyService(IBuildingPropertyRepository buildingPropertyRepository, IStorageService storageService, IMapper mapper)
+        public BuildingPropertyService(
+            IBuildingPropertyRepository buildingPropertyRepository,
+            IOwnerRepository ownerRepository,
+            IStorageService storageService, 
+            IMapper mapper)
         {
             _buildingPropertyRepository = buildingPropertyRepository;
+            _ownerRepository = ownerRepository;
             _storageService = storageService;
             _mapper = mapper;
         }
@@ -31,9 +38,10 @@ namespace RealEstate.Application.Interfaces
         /// Retrieves all building properties.
         /// </summary>
         /// <returns>A collection of building property DTOs.</returns>
-        public async Task<IEnumerable<BuildingPropertyDTO>> GetBuildingProperties()
+        public async Task<IEnumerable<BuildingPropertyDTO>> GetBuildingProperties(BuildingPropertyFilterDTO buildingPropertyFilter)
         {
-            List<BuildingProperty> buildingProperties = (await _buildingPropertyRepository.GetBuildingProperties()).ToList();
+            BuildingPropertyFilter filter = _mapper.Map<BuildingPropertyFilter>(buildingPropertyFilter);
+            List<BuildingProperty> buildingProperties = (await _buildingPropertyRepository.GetBuildingProperties(filter)).ToList();
             return _mapper.Map<List<BuildingPropertyDTO>>(buildingProperties);
         }
 
@@ -44,6 +52,8 @@ namespace RealEstate.Application.Interfaces
         /// <returns>The created building property DTO.</returns>
         public async Task<BuildingPropertyDTO> CreateBuildingProperty(CreateBuildingPropertyDTO buildingPropertyDTO)
         {
+            await _ownerRepository.GetOwnerById(Guid.Parse(buildingPropertyDTO.OwnerId));
+            
             BuildingProperty buildingProperty = _mapper.Map<BuildingProperty>(buildingPropertyDTO);
             await _buildingPropertyRepository.CreateBuildingProperty(buildingProperty);
             return _mapper.Map<BuildingPropertyDTO>(buildingProperty);
@@ -54,9 +64,9 @@ namespace RealEstate.Application.Interfaces
         /// </summary>
         /// <param name="propertyId">The property ID.</param>
         /// <param name="imageData">The image data.</param>
-        public async Task AddImageToBuildingProperty(Guid propertyId, string filename, Stream stream)
+        public async Task AddImageToBuildingProperty(string propertyId, string filename, Stream stream)
         {
-            BuildingProperty property = await _buildingPropertyRepository.GetBuildingPropertyById(propertyId);
+            BuildingProperty property = await _buildingPropertyRepository.GetBuildingPropertyById(Guid.Parse(propertyId));
             string url =await _storageService.UploadFileAsync("images", filename, stream);
 
             if (property.BuildingPropertiesImages == null)
@@ -83,9 +93,9 @@ namespace RealEstate.Application.Interfaces
         /// </summary>
         /// <param name="propertyId">The property ID.</param>
         /// <param name="price">The new price.</param>
-        public async Task ChangeBuildingPropertyPrice(Guid propertyId, double price)
+        public async Task ChangeBuildingPropertyPrice(string propertyId, double price)
         {
-            BuildingProperty property = await _buildingPropertyRepository.GetBuildingPropertyById(propertyId);
+            BuildingProperty property = await _buildingPropertyRepository.GetBuildingPropertyById(Guid.Parse(propertyId));
             property.Price = price;
             await _buildingPropertyRepository.UpdateBuildingProperty(property);
         }
@@ -95,9 +105,9 @@ namespace RealEstate.Application.Interfaces
         /// </summary>
         /// <param name="propertyId">The property ID.</param>
         /// <param name="buildingPropertyDTO">The updated building property DTO.</param>
-        public async Task UpdateBuildingProperty(Guid propertyId, UpdateBuildingPropertyDTO buildingPropertyDTO)
+        public async Task UpdateBuildingProperty(string propertyId, UpdateBuildingPropertyDTO buildingPropertyDTO)
         {
-            BuildingProperty property = await _buildingPropertyRepository.GetBuildingPropertyById(propertyId);
+            BuildingProperty property = await _buildingPropertyRepository.GetBuildingPropertyById(Guid.Parse(propertyId));
 
             property.Name = buildingPropertyDTO.Name;
             property.Address = buildingPropertyDTO.Address;

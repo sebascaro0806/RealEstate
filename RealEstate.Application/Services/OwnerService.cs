@@ -25,6 +25,17 @@ namespace RealEstate.Application.Services
             _mapper = mapper;
         }
 
+
+        /// <summary>
+        /// Retrieves all owners.
+        /// </summary>
+        /// <returns>A collection of owner DTOs.</returns>
+        public async Task<IEnumerable<OwnerDTO>> GetOwners()
+        {
+            List<Owner> owners = (await _ownerRepository.GetOwners()).ToList();
+            return _mapper.Map<List<OwnerDTO>>(owners);
+        }
+
         /// <summary>
         /// Creates a new owner.
         /// </summary>
@@ -35,16 +46,6 @@ namespace RealEstate.Application.Services
             Owner owner = _mapper.Map<Owner>(ownerDTO);
             await _ownerRepository.CreateOwner(owner);
             return _mapper.Map<OwnerDTO>(owner);
-        }
-
-        /// <summary>
-        /// Retrieves all owners.
-        /// </summary>
-        /// <returns>A collection of owner DTOs.</returns>
-        public async Task<IEnumerable<OwnerDTO>> GetOwners()
-        {
-            List<Owner> owners = (await _ownerRepository.GetOwners()).ToList();
-            return _mapper.Map<List<OwnerDTO>>(owners);
         }
     }
 }

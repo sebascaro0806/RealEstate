@@ -1,4 +1,5 @@
-﻿using RealEstate.Domain.Models;
+﻿using RealEstate.Domain.Filters;
+using RealEstate.Domain.Models;
 
 namespace RealEstate.Domain.Interfaces
 {
@@ -18,7 +19,7 @@ namespace RealEstate.Domain.Interfaces
         /// Retrieves all building properties.
         /// </summary>
         /// <returns>A collection of all building properties.</returns>
-        Task<IEnumerable<BuildingProperty>> GetBuildingProperties();
+        Task<IEnumerable<BuildingProperty>> GetBuildingProperties(BuildingPropertyFilter buildingPropertyFilter);
 
         /// <summary>
         /// Updates a building property.

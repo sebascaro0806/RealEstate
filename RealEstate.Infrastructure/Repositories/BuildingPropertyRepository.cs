@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RealEstate.Domain.Exceptions;
+using RealEstate.Domain.Filters;
 using RealEstate.Domain.Interfaces;
 using RealEstate.Domain.Models;
+using RealEstate.Infrastructure.Builders;
 using RealEstate.Infrastructure.Context;
 
 namespace RealEstate.Infrastructure.Repositories
@@ -34,8 +37,7 @@ namespace RealEstate.Infrastructure.Repositories
 
             if (buildingProperty == null)
             {
-                //TODO
-                throw new Exception("La propiedad no existe");
+                throw new NotFoundException($"The building property with the ID { propertyId } does not exist.");
             }
 
             return buildingProperty;
@@ -45,9 +47,18 @@ namespace RealEstate.Infrastructure.Repositories
         /// Retrieves all building properties.
         /// </summary>
         /// <returns>A collection of building properties.</returns>
-        public async Task<IEnumerable<BuildingProperty>> GetBuildingProperties()
+        public async Task<IEnumerable<BuildingProperty>> GetBuildingProperties(BuildingPropertyFilter filter)
         {
-            return await _context.BuildingProperties
+            IQueryable<BuildingProperty> query = _context.BuildingProperties;
+            var queryBuilder = new BuildingPropertyFilterQueryBuilder(query);
+
+            queryBuilder.FilterByName(filter.Name)
+                        .FilterByAddress(filter.Address)
+                        .FilterByPriceRange(filter.MinPrice, filter.MaxPrice)
+                        .FilterByYearRange(filter.MinYear, filter.MaxYear);
+
+            return await queryBuilder
+                .Query
                 .Include(bp => bp.BuildingPropertiesImages)
                 .ToListAsync();
         }

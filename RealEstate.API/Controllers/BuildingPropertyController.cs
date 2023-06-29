@@ -28,9 +28,9 @@ namespace RealEstate.API.Controllers
         /// <param name="filterDTO">The filter query string parameter.</param>
         /// <returns>An <see cref="IActionResult"/> containing the building properties.</returns>
         [HttpGet]
-        public async Task<IActionResult> GetProperties([FromQuery] String filterDTO)
+        public async Task<IActionResult> GetProperties(BuildingPropertyFilterDTO buildingPropertyFilter)
         {
-            return Ok(await _buildingPropertyService.GetBuildingProperties());
+            return Ok(await _buildingPropertyService.GetBuildingProperties(buildingPropertyFilter));
         }
 
         /// <summary>
@@ -51,7 +51,8 @@ namespace RealEstate.API.Controllers
         /// <param name="file">The image file to be added.</param>
         [HttpPost("{propertyId}/images")]
         [ValidateFile(10485760, ".jpg", ".png")]
-        public async Task<IActionResult> AddPropertyImage(Guid propertyId, IFormFile file)
+        [ValidateGuidIdAttribute("propertyId")]
+        public async Task<IActionResult> AddPropertyImage(string propertyId, IFormFile file)
         {
             using (var stream = file.OpenReadStream())
             {
@@ -66,7 +67,8 @@ namespace RealEstate.API.Controllers
         /// <param name="propertyId">The ID of the building property.</param>
         /// <param name="price">The new price of the building property.</param>
         [HttpPut("{propertyId}/price")]
-        public async Task<IActionResult> ChangePropertyPrice(Guid propertyId, double price)
+        [ValidateGuidIdAttribute("propertyId")]
+        public async Task<IActionResult> ChangePropertyPrice(string propertyId, double price)
         {
             await _buildingPropertyService.ChangeBuildingPropertyPrice(propertyId, price);
             return NoContent();
@@ -78,7 +80,8 @@ namespace RealEstate.API.Controllers
         /// <param name="propertyId">The ID of the building property.</param>
         /// <param name="propertyDTO">The updated data for the building property.</param>
         [HttpPut("{propertyId}")]
-        public async Task<IActionResult> UpdateBuildingProperty(Guid propertyId, UpdateBuildingPropertyDTO propertyDTO)
+        [ValidateGuidIdAttribute("propertyId")]
+        public async Task<IActionResult> UpdateBuildingProperty(string propertyId, UpdateBuildingPropertyDTO propertyDTO)
         {
             await _buildingPropertyService.UpdateBuildingProperty(propertyId, propertyDTO);
             return NoContent();

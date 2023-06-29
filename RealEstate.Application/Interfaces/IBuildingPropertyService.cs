@@ -11,7 +11,7 @@ namespace RealEstate.Application.Interfaces
         /// Retrieves a collection of building properties.
         /// </summary>
         /// <returns>A task that represents the asynchronous operation. The task result contains the collection of building properties.</returns>
-        public Task<IEnumerable<BuildingPropertyDTO>> GetBuildingProperties();
+        public Task<IEnumerable<BuildingPropertyDTO>> GetBuildingProperties(BuildingPropertyFilterDTO buildingPropertyFilter);
 
         /// <summary>
         /// Creates a new building property.
@@ -25,14 +25,14 @@ namespace RealEstate.Application.Interfaces
         /// </summary>
         /// <param name="propertyId">The ID of the building property.</param>
         /// <param name="imageData">The binary data of the image to add.</param>
-        public Task AddImageToBuildingProperty(Guid propertyId, string filename, Stream stream);
+        public Task AddImageToBuildingProperty(string propertyId, string filename, Stream stream);
 
         /// <summary>
         /// Changes the price of a building property.
         /// </summary>
         /// <param name="propertyId">The ID of the building property.</param>
         /// <param name="price">The new price of the building property.</param>
-        public Task ChangeBuildingPropertyPrice(Guid propertyId, double price);
+        public Task ChangeBuildingPropertyPrice(string propertyId, double price);
 
         /// <summary>
         /// Updates the details of a building property.
@@ -40,6 +40,6 @@ namespace RealEstate.Application.Interfaces
         /// <param name="propertyId">The ID of the building property to update.</param>
         /// <param name="buildingPropertyDTO">The DTO object containing the updated details of the building property.</param>
         /// TODO
-        public Task UpdateBuildingProperty(Guid propertyId, UpdateBuildingPropertyDTO buildingPropertyDTO);
+        public Task UpdateBuildingProperty(string propertyId, UpdateBuildingPropertyDTO buildingPropertyDTO);
     }
 }
