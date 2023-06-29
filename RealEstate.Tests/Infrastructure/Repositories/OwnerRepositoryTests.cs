@@ -6,24 +6,8 @@ namespace RealEstate.Tests.Infrastructure.Repositories
     /// Represents a set of unit tests for the OwnerRepository class.
     /// </summary>
     [TestFixture]
-    public class OwnerRepositoryTests
+    public class OwnerRepositoryTests : BaseRepositoryTest
     {
-
-        /// <summary>
-        /// The options for configuring the in-memory database context.
-        /// </summary>
-        private DbContextOptions<RealEstateDBContext> _dbContextOptions;
-
-        /// <summary>
-        /// Sets up the test fixture by configuring the in-memory database options.
-        /// </summary>
-        [SetUp]
-        public void Setup()
-        {
-            _dbContextOptions = new DbContextOptionsBuilder<RealEstateDBContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase")
-                .Options;
-        }
 
         /// <summary>
         /// Tears down the test fixture by deleting the in-memory database.

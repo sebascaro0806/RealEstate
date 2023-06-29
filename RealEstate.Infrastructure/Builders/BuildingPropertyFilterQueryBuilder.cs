@@ -1,34 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RealEstate.Domain.Models;
+﻿using RealEstate.Domain.Models;
 
 namespace RealEstate.Infrastructure.Builders
 {
-    public  class BuildingPropertyFilterQueryBuilder
+    public  class BuildingPropertyFilterQueryBuilder : BaseQueryBuilder<BuildingProperty>
     {
-        private IQueryable<BuildingProperty> _query;
-
-        public BuildingPropertyFilterQueryBuilder(IQueryable<BuildingProperty> query)
+        public BuildingPropertyFilterQueryBuilder(IQueryable<BuildingProperty> query) : base(query)
         {
-            _query = query;
         }
 
-        public IQueryable<BuildingProperty> Query => _query;
-
-        public BuildingPropertyFilterQueryBuilder FilterByName(string name)
+        public BuildingPropertyFilterQueryBuilder FilterByName(string? name)
         {
             if (!string.IsNullOrEmpty(name))
             {
-                _query = _query.Where(p => p.Name.Contains(name));
+                Query = Query.Where(p => p.Name.Contains(name));
             }
 
             return this;
         }
 
-        public BuildingPropertyFilterQueryBuilder FilterByAddress(string address)
+        public BuildingPropertyFilterQueryBuilder FilterByAddress(string? address)
         {
             if (!string.IsNullOrEmpty(address))
             {
-                _query = _query.Where(p => p.Address.Contains(address));
+                Query = Query.Where(p => p.Address.Contains(address));
             }
 
             return this;
@@ -38,12 +32,12 @@ namespace RealEstate.Infrastructure.Builders
         {
             if (minPrice.HasValue)
             {
-                _query = _query.Where(p => p.Price >= minPrice.Value);
+                Query = Query.Where(p => p.Price >= minPrice.Value);
             }
 
             if (maxPrice.HasValue)
             {
-                _query = _query.Where(p => p.Price <= maxPrice.Value);
+                Query = Query.Where(p => p.Price <= maxPrice.Value);
             }
 
             return this;
@@ -53,12 +47,22 @@ namespace RealEstate.Infrastructure.Builders
         {
             if (minYear.HasValue)
             {
-                _query = _query.Where(p => p.Year >= minYear.Value);
+                Query = Query.Where(p => p.Year >= minYear.Value);
             }
 
             if (maxYear.HasValue)
             {
-                _query = _query.Where(p => p.Year <= maxYear.Value);
+                Query = Query.Where(p => p.Year <= maxYear.Value);
+            }
+
+            return this;
+        }
+
+        public BuildingPropertyFilterQueryBuilder FilterByCodeInternal(int? code)
+        {
+            if (code.HasValue)
+            {
+                Query = Query.Where(p => p.CodeInternal == code);
             }
 
             return this;

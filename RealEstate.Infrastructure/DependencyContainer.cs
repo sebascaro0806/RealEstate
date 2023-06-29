@@ -20,7 +20,7 @@ namespace RealEstate.Infrastructure
         /// <param name="services">The IServiceCollection instance to add the services to.</param>
         /// <param name="configuration">The IConfiguration instance containing configuration data.</param>
         /// <returns>The modified IServiceCollection instance.</returns>
-        public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection RegisterServices(this IServiceCollection services)
         {
             // Configure the RealEstateDBConext with the specified connection string
             services.AddDbContext<RealEstateDBContext>(options =>
@@ -29,7 +29,6 @@ namespace RealEstate.Infrastructure
             });
 
             services.AddTransient<RealEstateDBContext>();
-
             services.AddSingleton<IStorageService, AzureStorageService>(provider =>
             {
                 var storageConnectionString = Environment.GetEnvironmentVariable("Azure_StorageConnectionString");

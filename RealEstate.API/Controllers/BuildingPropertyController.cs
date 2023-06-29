@@ -2,7 +2,6 @@
 using RealEstate.API.Filters;
 using RealEstate.Application.DTOs.BuildingProperty;
 using RealEstate.Application.Interfaces;
-using RealEstate.Infrastructure.ExternalServices.Storage;
 
 namespace RealEstate.API.Controllers
 {
@@ -28,7 +27,7 @@ namespace RealEstate.API.Controllers
         /// <param name="filterDTO">The filter query string parameter.</param>
         /// <returns>An <see cref="IActionResult"/> containing the building properties.</returns>
         [HttpGet]
-        public async Task<IActionResult> GetProperties(BuildingPropertyFilterDTO buildingPropertyFilter)
+        public async Task<IActionResult> GetProperties([FromQuery] BuildingPropertyFilterDTO buildingPropertyFilter)
         {
             return Ok(await _buildingPropertyService.GetBuildingProperties(buildingPropertyFilter));
         }

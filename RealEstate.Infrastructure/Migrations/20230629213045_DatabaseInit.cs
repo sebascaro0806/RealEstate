@@ -6,25 +6,57 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RealEstate.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class CompleteDatabase : Migration
+    public partial class DatabaseInit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<Guid>(
-                name: "OwnerId",
-                table: "BuildingProperties",
-                type: "uniqueidentifier",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+            migrationBuilder.CreateTable(
+                name: "Owners",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Birthday = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Owners", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BuildingProperties",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    CodeInternal = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Year = table.Column<int>(type: "int", nullable: false),
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BuildingProperties", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BuildingProperties_Owners_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "Owners",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateTable(
                 name: "BuildingPropertiesImages",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    BuildingPropertyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BuildingPropertyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Enabled = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -60,21 +92,6 @@ namespace RealEstate.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Owners",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Photo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Birthday = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Owners", x => x.Id);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_BuildingProperties_OwnerId",
                 table: "BuildingProperties",
@@ -83,30 +100,17 @@ namespace RealEstate.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_BuildingPropertiesImages_BuildingPropertyId",
                 table: "BuildingPropertiesImages",
-                column: "BuildingPropertyId",
-                unique: true);
+                column: "BuildingPropertyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BuildingPropertiesTraces_BuildingPropertyId",
                 table: "BuildingPropertiesTraces",
                 column: "BuildingPropertyId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_BuildingProperties_Owners_OwnerId",
-                table: "BuildingProperties",
-                column: "OwnerId",
-                principalTable: "Owners",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_BuildingProperties_Owners_OwnerId",
-                table: "BuildingProperties");
-
             migrationBuilder.DropTable(
                 name: "BuildingPropertiesImages");
 
@@ -114,15 +118,10 @@ namespace RealEstate.Infrastructure.Migrations
                 name: "BuildingPropertiesTraces");
 
             migrationBuilder.DropTable(
+                name: "BuildingProperties");
+
+            migrationBuilder.DropTable(
                 name: "Owners");
-
-            migrationBuilder.DropIndex(
-                name: "IX_BuildingProperties_OwnerId",
-                table: "BuildingProperties");
-
-            migrationBuilder.DropColumn(
-                name: "OwnerId",
-                table: "BuildingProperties");
         }
     }
 }

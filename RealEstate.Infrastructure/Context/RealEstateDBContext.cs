@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using RealEstate.Domain.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -51,6 +52,11 @@ namespace RealEstate.Infrastructure.Context
                 .HasMany(bpi => bpi.BuildingPropertiesImages)
                 .WithOne(bp => bp.BuildingProperty)
                 .HasForeignKey(bp => bp.BuildingPropertyId);
+
+            modelBuilder.Entity<BuildingProperty>()
+                .Property(p => p.CodeInternal)
+                .ValueGeneratedOnAdd()
+                .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
         }
     }
 }

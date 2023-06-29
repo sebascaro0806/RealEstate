@@ -42,7 +42,7 @@ builder.Services.AddTransient<IOwnerService, OwnerService>();
 builder.Services.AddTransient<IOwnerRepository, OwnerRepository>();
 
 // Register database services
-builder.Services.RegisterServices(builder.Configuration);
+builder.Services.RegisterServices();
 
 builder.Services.AddCors(options =>
 {

@@ -52,14 +52,17 @@ namespace RealEstate.Infrastructure.Repositories
             IQueryable<BuildingProperty> query = _context.BuildingProperties;
             var queryBuilder = new BuildingPropertyFilterQueryBuilder(query);
 
-            queryBuilder.FilterByName(filter.Name)
-                        .FilterByAddress(filter.Address)
-                        .FilterByPriceRange(filter.MinPrice, filter.MaxPrice)
-                        .FilterByYearRange(filter.MinYear, filter.MaxYear);
+            var result = queryBuilder
+                .FilterByCodeInternal(filter.CodeInternal)
+                .FilterByName(filter.Name)
+                .FilterByAddress(filter.Address)
+                .FilterByPriceRange(filter.MinPrice, filter.MaxPrice)
+                .FilterByYearRange(filter.MinYear, filter.MaxYear)
+                .ApplyPagination(filter.PageNumber, filter.PageSize)
+                .GetQuery();
 
-            return await queryBuilder
-                .Query
-                .Include(bp => bp.BuildingPropertiesImages)
+            return await result
+                .Include(bp => bp.BuildingPropertiesImages.Where(bp => bp.Enabled))
                 .ToListAsync();
         }
 

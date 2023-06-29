@@ -15,7 +15,8 @@ namespace RealEstate.Domain.Models
 
         public Double Price { get; set; }
 
-        public string CodeInternal { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int CodeInternal { get; set; }
 
         public int Year { get; set; }
 

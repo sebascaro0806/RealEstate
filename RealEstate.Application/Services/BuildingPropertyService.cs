@@ -111,7 +111,6 @@ namespace RealEstate.Application.Interfaces
 
             property.Name = buildingPropertyDTO.Name;
             property.Address = buildingPropertyDTO.Address;
-            property.CodeInternal= buildingPropertyDTO.CodeInternal;
             property.Price = buildingPropertyDTO.Price;
             property.Year = buildingPropertyDTO.Year;
 

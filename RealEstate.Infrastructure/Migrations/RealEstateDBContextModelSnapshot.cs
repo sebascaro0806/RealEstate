@@ -11,7 +11,7 @@ using RealEstate.Infrastructure.Context;
 namespace RealEstate.Infrastructure.Migrations
 {
     [DbContext(typeof(RealEstateDBContext))]
-    partial class RealEstateDBConextModelSnapshot : ModelSnapshot
+    partial class RealEstateDBContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -32,9 +32,11 @@ namespace RealEstate.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CodeInternal")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CodeInternal")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CodeInternal"));
 
                     b.Property<string>("Name")
                         .IsRequired()

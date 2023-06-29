@@ -12,8 +12,8 @@ using RealEstate.Infrastructure.Context;
 namespace RealEstate.Infrastructure.Migrations
 {
     [DbContext(typeof(RealEstateDBContext))]
-    [Migration("20230626202133_CompleteDatabase")]
-    partial class CompleteDatabase
+    [Migration("20230629213045_DatabaseInit")]
+    partial class DatabaseInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,9 +35,11 @@ namespace RealEstate.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CodeInternal")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CodeInternal")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CodeInternal"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -68,14 +70,16 @@ namespace RealEstate.Infrastructure.Migrations
                     b.Property<Guid>("BuildingPropertyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<byte[]>("ImageData")
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Url")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BuildingPropertyId")
-                        .IsUnique();
+                    b.HasIndex("BuildingPropertyId");
 
                     b.ToTable("BuildingPropertiesImages");
                 });
@@ -129,10 +133,6 @@ namespace RealEstate.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Photo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Owners");
@@ -152,8 +152,8 @@ namespace RealEstate.Infrastructure.Migrations
             modelBuilder.Entity("RealEstate.Domain.Models.BuildingPropertyImage", b =>
                 {
                     b.HasOne("RealEstate.Domain.Models.BuildingProperty", "BuildingProperty")
-                        .WithOne("BuildingPropertyImage")
-                        .HasForeignKey("RealEstate.Domain.Models.BuildingPropertyImage", "BuildingPropertyId")
+                        .WithMany("BuildingPropertiesImages")
+                        .HasForeignKey("BuildingPropertyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -173,8 +173,7 @@ namespace RealEstate.Infrastructure.Migrations
 
             modelBuilder.Entity("RealEstate.Domain.Models.BuildingProperty", b =>
                 {
-                    b.Navigation("BuildingPropertyImage")
-                        .IsRequired();
+                    b.Navigation("BuildingPropertiesImages");
                 });
 
             modelBuilder.Entity("RealEstate.Domain.Models.Owner", b =>

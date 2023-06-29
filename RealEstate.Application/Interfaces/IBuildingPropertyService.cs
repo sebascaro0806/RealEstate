@@ -39,7 +39,6 @@ namespace RealEstate.Application.Interfaces
         /// </summary>
         /// <param name="propertyId">The ID of the building property to update.</param>
         /// <param name="buildingPropertyDTO">The DTO object containing the updated details of the building property.</param>
-        /// TODO
         public Task UpdateBuildingProperty(string propertyId, UpdateBuildingPropertyDTO buildingPropertyDTO);
     }
 }
