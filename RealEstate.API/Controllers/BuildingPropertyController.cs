@@ -40,7 +40,8 @@ namespace RealEstate.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateProperty(CreateBuildingPropertyDTO propertyDTO)
         {
-            return Ok(await _buildingPropertyService.CreateBuildingProperty(propertyDTO));
+            var result = await _buildingPropertyService.CreateBuildingProperty(propertyDTO);
+            return Created(result.Id.ToString(), result);
         }
 
         /// <summary>
@@ -55,7 +56,7 @@ namespace RealEstate.API.Controllers
             using (var stream = file.OpenReadStream())
             {
                 await _buildingPropertyService.AddImageToBuildingProperty(propertyId, file.FileName, stream);
-                return Ok();
+                return Created(propertyId.ToString(), file.FileName);
             }
         }
 
@@ -68,7 +69,7 @@ namespace RealEstate.API.Controllers
         public async Task<IActionResult> ChangePropertyPrice(Guid propertyId, double price)
         {
             await _buildingPropertyService.ChangeBuildingPropertyPrice(propertyId, price);
-            return Ok();
+            return NoContent();
         }
 
         /// <summary>
@@ -80,7 +81,7 @@ namespace RealEstate.API.Controllers
         public async Task<IActionResult> UpdateBuildingProperty(Guid propertyId, UpdateBuildingPropertyDTO propertyDTO)
         {
             await _buildingPropertyService.UpdateBuildingProperty(propertyId, propertyDTO);
-            return Ok();
+            return NoContent();
         }
     }
 }

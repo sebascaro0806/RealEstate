@@ -108,6 +108,12 @@ namespace RealEstate.Application.Interfaces
             await _buildingPropertyRepository.UpdateBuildingProperty(property);
         }
 
+        /// <summary>
+        /// Compares the URL of an image with a provided URL and returns a boolean value indicating whether they are equal.
+        /// </summary>
+        /// <param name="image">The image to compare.</param>
+        /// <param name="url">The URL to compare the image with.</param>
+        /// <returns>A boolean value indicating whether the image URL is equal to the provided URL.</returns>
         private bool IsImageEqual(BuildingPropertyImage image, string url)
         {
             return string.Equals(image.Url, url, StringComparison.OrdinalIgnoreCase);
