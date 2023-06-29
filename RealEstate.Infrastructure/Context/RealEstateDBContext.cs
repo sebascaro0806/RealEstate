@@ -42,10 +42,10 @@ namespace RealEstate.Infrastructure.Context
                 .WithOne(bp => bp.Owner)
                 .HasForeignKey(bp => bp.OwnerId);
 
-            modelBuilder.Entity<BuildingPropertyImage>()
-                .HasOne(bpi => bpi.BuildingProperty)
-                .WithOne(bp => bp.BuildingPropertyImage)
-                .HasForeignKey<BuildingPropertyImage>(bpi => bpi.BuildingPropertyId);
+            modelBuilder.Entity<BuildingProperty>()
+                .HasMany(bpi => bpi.BuildingPropertiesImages)
+                .WithOne(bp => bp.BuildingProperty)
+                .HasForeignKey(bp => bp.BuildingPropertyId);
         }
     }
 }

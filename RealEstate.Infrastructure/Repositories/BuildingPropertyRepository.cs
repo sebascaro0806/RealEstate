@@ -28,7 +28,10 @@ namespace RealEstate.Infrastructure.Repositories
         /// <returns>The building property with the specified ID.</returns>
         public async Task<BuildingProperty> GetBuildingPropertyById(Guid propertyId)
         {
-            var buildingProperty = await _context.BuildingProperties.FirstOrDefaultAsync(bp => bp.Id == propertyId);
+            var buildingProperty = await _context.BuildingProperties
+                .Include(bp => bp.BuildingPropertiesImages)
+                .FirstOrDefaultAsync(bp => bp.Id == propertyId);
+
             if (buildingProperty == null)
             {
                 //TODO
@@ -45,7 +48,7 @@ namespace RealEstate.Infrastructure.Repositories
         public async Task<IEnumerable<BuildingProperty>> GetBuildingProperties()
         {
             return await _context.BuildingProperties
-                .Include(bp => bp.BuildingPropertyImage)
+                .Include(bp => bp.BuildingPropertiesImages)
                 .ToListAsync();
         }
 

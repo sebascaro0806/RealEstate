@@ -2,6 +2,7 @@
 {
     public class BuildingPropertyImageDTO
     {
-        public byte[] ImageData { get; set; }
+        public string Url{ get; set; }
+        public bool Enabled { get; set; }
     }
 }

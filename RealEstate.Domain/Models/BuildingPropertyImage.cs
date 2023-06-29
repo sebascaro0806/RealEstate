@@ -11,10 +11,12 @@ namespace RealEstate.Domain.Models
         [Key]
         public Guid Id { get; set; }
 
-        public byte[] ImageData { get; set; }
+        public string Url { get; set; }
 
         [ForeignKey("BuildingProperty")]
         public Guid BuildingPropertyId { get; set; }
+
+        public bool Enabled { get; set; }
 
         public virtual BuildingProperty BuildingProperty { get; set; }
     }

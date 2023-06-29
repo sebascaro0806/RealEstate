@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RealEstate.API.Filters;
 using RealEstate.Application.DTOs.BuildingProperty;
 using RealEstate.Application.Interfaces;
+using RealEstate.Infrastructure.ExternalServices.Storage;
 
 namespace RealEstate.API.Controllers
 {
@@ -47,20 +49,12 @@ namespace RealEstate.API.Controllers
         /// <param name="propertyId">The ID of the building property.</param>
         /// <param name="file">The image file to be added.</param>
         [HttpPost("{propertyId}/images")]
+        [ValidateFile(10485760, ".jpg", ".png")]
         public async Task<IActionResult> AddPropertyImage(Guid propertyId, IFormFile file)
         {
-
-            if (file == null || file.Length == 0)
+            using (var stream = file.OpenReadStream())
             {
-                return BadRequest("No file has been sent");
-            }
-
-            using (var stream = new MemoryStream())
-            {
-                await file.CopyToAsync(stream);
-                var imageData = stream.ToArray();
-
-                await _buildingPropertyService.AddImageToBuildingProperty(propertyId, imageData);
+                await _buildingPropertyService.AddImageToBuildingProperty(propertyId, file.FileName, stream);
                 return Ok();
             }
         }

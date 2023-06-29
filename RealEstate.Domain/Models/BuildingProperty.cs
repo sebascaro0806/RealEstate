@@ -24,7 +24,7 @@ namespace RealEstate.Domain.Models
 
         public virtual Owner Owner { get; set; }
 
-        public virtual BuildingPropertyImage BuildingPropertyImage { get; set; }
+        public virtual ICollection<BuildingPropertyImage> BuildingPropertiesImages { get; set; }
 
     }
 }

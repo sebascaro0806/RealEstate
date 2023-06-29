@@ -25,7 +25,7 @@ namespace RealEstate.Application.Interfaces
         /// </summary>
         /// <param name="propertyId">The ID of the building property.</param>
         /// <param name="imageData">The binary data of the image to add.</param>
-        public Task AddImageToBuildingProperty(Guid propertyId, byte[] imageData);
+        public Task AddImageToBuildingProperty(Guid propertyId, string filename, Stream stream);
 
         /// <summary>
         /// Changes the price of a building property.

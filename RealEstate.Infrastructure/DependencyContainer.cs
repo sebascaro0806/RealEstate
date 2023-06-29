@@ -2,6 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using RealEstate.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using RealEstate.Infrastructure.ExternalServices.Storage.Azure;
+using RealEstate.Infrastructure.ExternalServices.Storage;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace RealEstate.Infrastructure
 {
@@ -25,6 +29,12 @@ namespace RealEstate.Infrastructure
             });
 
             services.AddTransient<RealEstateDBContext>();
+
+            services.AddSingleton<IStorageService, AzureStorageService>(provider =>
+            {
+                var storageConnectionString = Environment.GetEnvironmentVariable("Azure_StorageConnectionString");
+                return new AzureStorageService(storageConnectionString);
+            });
 
             return services;
         }

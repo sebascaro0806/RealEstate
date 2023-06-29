@@ -2,6 +2,7 @@
 using RealEstate.Application.DTOs.BuildingProperty;
 using RealEstate.Domain.Interfaces;
 using RealEstate.Domain.Models;
+using RealEstate.Infrastructure.ExternalServices.Storage;
 
 namespace RealEstate.Application.Interfaces
 {
@@ -11,6 +12,7 @@ namespace RealEstate.Application.Interfaces
     public class BuildingPropertyService : IBuildingPropertyService
     {
         private readonly IBuildingPropertyRepository _buildingPropertyRepository;
+        private readonly IStorageService _storageService;
         private readonly IMapper _mapper;
 
         /// <summary>
@@ -18,9 +20,10 @@ namespace RealEstate.Application.Interfaces
         /// </summary>
         /// <param name="buildingPropertyRepository">The building property repository.</param>
         /// <param name="mapper">The mapper.</param>
-        public BuildingPropertyService(IBuildingPropertyRepository buildingPropertyRepository, IMapper mapper)
+        public BuildingPropertyService(IBuildingPropertyRepository buildingPropertyRepository, IStorageService storageService, IMapper mapper)
         {
             _buildingPropertyRepository = buildingPropertyRepository;
+            _storageService = storageService;
             _mapper = mapper;
         }
 
@@ -51,13 +54,26 @@ namespace RealEstate.Application.Interfaces
         /// </summary>
         /// <param name="propertyId">The property ID.</param>
         /// <param name="imageData">The image data.</param>
-        public async Task AddImageToBuildingProperty(Guid propertyId, byte[] imageData)
+        public async Task AddImageToBuildingProperty(Guid propertyId, string filename, Stream stream)
         {
             BuildingProperty property = await _buildingPropertyRepository.GetBuildingPropertyById(propertyId);
-            property.BuildingPropertyImage = new BuildingPropertyImage
+            string url =await _storageService.UploadFileAsync("images", filename, stream);
+
+            if (property.BuildingPropertiesImages == null)
             {
-                ImageData = imageData
-            };
+                property.BuildingPropertiesImages = new List<BuildingPropertyImage>();
+            }
+            else
+            {
+                if (!property.BuildingPropertiesImages.Any(i => IsImageEqual(i, url)))
+                {
+                    property.BuildingPropertiesImages.Add(new BuildingPropertyImage
+                    {
+                        Enabled = true,
+                        Url = url
+                    });
+                }
+            }
 
             await _buildingPropertyRepository.UpdateBuildingProperty(property);
         }
@@ -90,6 +106,11 @@ namespace RealEstate.Application.Interfaces
             property.Year = buildingPropertyDTO.Year;
 
             await _buildingPropertyRepository.UpdateBuildingProperty(property);
+        }
+
+        private bool IsImageEqual(BuildingPropertyImage image, string url)
+        {
+            return string.Equals(image.Url, url, StringComparison.OrdinalIgnoreCase);
         }
     }
 }
