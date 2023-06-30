@@ -2,8 +2,10 @@
 using Moq;
 using RealEstate.Application.DTOs.BuildingProperty;
 using RealEstate.Application.Interfaces;
+using RealEstate.Domain.Filters;
 using RealEstate.Domain.Interfaces;
 using RealEstate.Infrastructure.ExternalServices.Storage;
+using System.Text;
 
 namespace RealEstate.Tests.Application.Services
 {
@@ -51,19 +53,176 @@ namespace RealEstate.Tests.Application.Services
                 new BuildingProperty { Id = Guid.NewGuid(), Name = "Property 3" }
             };
 
-            var buildingPropertyDTOs = buildingProperties.Select(bp => new BuildingPropertyDTO { Id = bp.Id, Name = bp.Name });
+            var buildingPropertyDTOs = buildingProperties
+                .Select(bp => new BuildingPropertyDTO 
+                { 
+                    Id = bp.Id,
+                    Name = bp.Name, 
+                    BuildingPropertiesImages = new List<BuildingPropertyImageDTO>() 
+                    { 
+                        new BuildingPropertyImageDTO()
+                    } 
+                });
 
-            /*_repositoryMock.Setup(repo => repo.GetBuildingProperties()).ReturnsAsync(buildingProperties);
+            var filter = new BuildingPropertyFilterDTO();
+
+            _repositoryMock.Setup(repo => repo.GetBuildingProperties(It.IsAny<BuildingPropertyFilter>())).ReturnsAsync(buildingProperties);
+
+            _mapperMock.Setup(mapper => mapper.Map<BuildingPropertyFilter>(filter))
+                .Returns(It.IsAny<BuildingPropertyFilter>());
+
             _mapperMock.Setup(mapper => mapper.Map<List<BuildingPropertyDTO>>(buildingProperties))
                 .Returns(buildingPropertyDTOs.ToList());
 
             // Act
-            var result = await _service.GetBuildingProperties();
+            var result = await _service.GetBuildingProperties(filter);
 
             // Assert
             Assert.NotNull(result);
             Assert.That(result.Count(), Is.EqualTo(buildingPropertyDTOs.Count()));
-            Assert.IsTrue(result.All(bp => buildingPropertyDTOs.Any(dto => dto.Id == bp.Id && dto.Name == bp.Name)));*/
+            Assert.IsTrue(result.All(bp => buildingPropertyDTOs.Any(dto => dto.Id == bp.Id && dto.Name == bp.Name)));
+        }
+
+        [Test]
+        public async Task CreateBuildingProperty_ValidInput_ReturnsBuildingPropertyDTO()
+        {
+            // Arrange
+            var buildingPropertyDTO = new CreateBuildingPropertyDTO
+            {
+                OwnerId = "b2858ed6-616a-4b95-bb5f-6e590db2c8cc"
+            };
+
+            _mapperMock.Setup(mapper => mapper.Map<BuildingProperty>(buildingPropertyDTO))
+               .Returns(new BuildingProperty());
+
+            _mapperMock.Setup(mapper => mapper.Map<BuildingPropertyDTO>(It.IsAny<BuildingProperty>()))
+               .Returns(new BuildingPropertyDTO());
+
+            _ownerRepositoryMock.Setup(x => x.GetOwnerById(Guid.Parse(buildingPropertyDTO.OwnerId)))
+                .ReturnsAsync(new Owner
+                {
+                    Id = Guid.Parse(buildingPropertyDTO.OwnerId),
+                    Name = "sebastian"
+                });
+
+            _repositoryMock.Setup(x => x.CreateBuildingProperty(It.IsAny<BuildingProperty>()))
+                .Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _service.CreateBuildingProperty(buildingPropertyDTO);
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        [Test]
+        public async Task AddImageToBuildingProperty_WhenPropertyExists_ShouldAddImageToProperty()
+        {
+            // Arrange
+            Guid propertyId = Guid.NewGuid();
+            string filename = "test-image.jpg";
+            var fileStream = new MemoryStream(Encoding.UTF8.GetBytes("Test file content"));
+
+            var buildingProperty = new BuildingProperty
+            {
+                Id = propertyId,
+                BuildingPropertiesImages = new List<BuildingPropertyImage>()
+            };
+
+            _storageBlobMock.Setup(service => service.UploadFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()))
+                             .ReturnsAsync("image-url");
+
+            _repositoryMock.Setup(repo => repo.GetBuildingPropertyById(propertyId))
+                                         .ReturnsAsync(buildingProperty);
+
+            // Act
+            await _service.AddImageToBuildingProperty(propertyId.ToString(), filename, fileStream);
+
+            // Assert
+            Assert.That(buildingProperty.BuildingPropertiesImages.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public async Task AddImageToBuildingProperty_WhenPropertyExists_AndNullImagesProperty_ShouldAddImageToProperty()
+        {
+            // Arrange
+            Guid propertyId = Guid.NewGuid();
+            string filename = "test-image.jpg";
+            var fileStream = new MemoryStream(Encoding.UTF8.GetBytes("Test file content"));
+
+            var buildingProperty = new BuildingProperty
+            {
+                Id = propertyId
+            };
+
+            _storageBlobMock.Setup(service => service.UploadFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()))
+                             .ReturnsAsync("image-url");
+
+            _repositoryMock.Setup(repo => repo.GetBuildingPropertyById(propertyId))
+                                         .ReturnsAsync(buildingProperty);
+
+            // Act
+            await _service.AddImageToBuildingProperty(propertyId.ToString(), filename, fileStream);
+
+            // Assert
+            Assert.That(buildingProperty.BuildingPropertiesImages.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public async Task ChangeBuildingPropertyPrice_WhenPropertyExists_ShouldUpdatePrice()
+        {
+            // Arrange
+            Guid propertyId = Guid.NewGuid();
+            double newPrice = 150000;
+
+            var buildingProperty = new BuildingProperty
+            {
+                Id = propertyId,
+                Price = 100000
+            };
+
+            _repositoryMock.Setup(repo => repo.GetBuildingPropertyById(propertyId))
+                                         .ReturnsAsync(buildingProperty);
+            // Act
+            await _service.ChangeBuildingPropertyPrice(propertyId.ToString(), newPrice);
+
+            // Assert
+            Assert.That(buildingProperty.Price, Is.EqualTo(newPrice));
+        }
+
+        [Test]
+        public async Task UpdateBuildingProperty_WhenPropertyExists_ShouldUpdatePropertyDetails()
+        {
+            // Arrange
+            Guid propertyId = Guid.NewGuid();
+            var buildingPropertyDTO = new UpdateBuildingPropertyDTO
+            {
+                Name = "Updated Property",
+                Address = "Updated Address",
+                Price = 150000,
+                Year = 2022
+            };
+
+            var buildingProperty = new BuildingProperty
+            {
+                Id = propertyId,
+                Name = "Old Property",
+                Address = "Old Address",
+                Price = 100000,
+                Year = 2020
+            };
+
+            _repositoryMock.Setup(repo => repo.GetBuildingPropertyById(propertyId))
+                                         .ReturnsAsync(buildingProperty);
+
+            // Act
+            await _service.UpdateBuildingProperty(propertyId.ToString(), buildingPropertyDTO);
+
+            // Assert
+            Assert.That(buildingProperty.Name, Is.EqualTo(buildingPropertyDTO.Name));
+            Assert.That(buildingProperty.Address, Is.EqualTo(buildingPropertyDTO.Address));
+            Assert.That(buildingProperty.Price, Is.EqualTo(buildingPropertyDTO.Price));
+            Assert.That(buildingProperty.Year, Is.EqualTo(buildingPropertyDTO.Year));
         }
     }
 }

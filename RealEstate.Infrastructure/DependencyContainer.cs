@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using RealEstate.Infrastructure.ExternalServices.Storage.Azure;
 using RealEstate.Infrastructure.ExternalServices.Storage;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Azure.Storage.Blobs;
 
 namespace RealEstate.Infrastructure
 {
@@ -32,7 +33,8 @@ namespace RealEstate.Infrastructure
             services.AddSingleton<IStorageService, AzureStorageService>(provider =>
             {
                 var storageConnectionString = Environment.GetEnvironmentVariable("Azure_StorageConnectionString");
-                return new AzureStorageService(storageConnectionString);
+                BlobServiceClient blobServiceClient = new BlobServiceClient(storageConnectionString);
+                return new AzureStorageService(blobServiceClient);
             });
 
             return services;

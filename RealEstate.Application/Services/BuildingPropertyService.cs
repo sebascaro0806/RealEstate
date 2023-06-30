@@ -73,16 +73,14 @@ namespace RealEstate.Application.Interfaces
             {
                 property.BuildingPropertiesImages = new List<BuildingPropertyImage>();
             }
-            else
+
+            if (!property.BuildingPropertiesImages.Any(i => IsImageEqual(i, url)))
             {
-                if (!property.BuildingPropertiesImages.Any(i => IsImageEqual(i, url)))
+                property.BuildingPropertiesImages.Add(new BuildingPropertyImage
                 {
-                    property.BuildingPropertiesImages.Add(new BuildingPropertyImage
-                    {
-                        Enabled = true,
-                        Url = url
-                    });
-                }
+                    Enabled = true,
+                    Url = url
+                });
             }
 
             await _buildingPropertyRepository.UpdateBuildingProperty(property);

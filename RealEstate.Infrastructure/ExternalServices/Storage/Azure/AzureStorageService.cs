@@ -13,9 +13,9 @@ namespace RealEstate.Infrastructure.ExternalServices.Storage.Azure
         /// Initializes a new instance of the AzureStorageService class.
         /// </summary>
         /// <param name="connectionString">The connection string for the Azure Storage account.</param>
-        public AzureStorageService(string connectionString)
+        public AzureStorageService(BlobServiceClient blobServiceClient)
         {
-            _blobServiceClient = new BlobServiceClient(connectionString);
+            _blobServiceClient = blobServiceClient;
         }
 
         /// <summary>
