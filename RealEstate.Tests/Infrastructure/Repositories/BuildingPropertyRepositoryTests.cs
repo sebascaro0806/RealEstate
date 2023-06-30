@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RealEstate.Domain.Exceptions;
+﻿using RealEstate.Domain.Exceptions;
 using RealEstate.Domain.Filters;
 
 namespace RealEstate.Tests.Infrastructure.Repositories
