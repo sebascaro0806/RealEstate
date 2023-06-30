@@ -26,7 +26,7 @@ services:
             - sql.server
         environment:
             - DB_ConnectionString=Data Source=sql.server;Initial Catalog=RealEstate;User ID=sa;Password=SebasCaro454;TrustServerCertificate=True;
-            - Azure_StorageConnectionString=DefaultEndpointsProtocol=https;AccountName=realestateatest;AccountKey=obkWsTxYiEl+cj78D0WgvAVEc1pE7AbAjhx2nqGuJ+CDWhFB999QwJKlq+JHexee9xrf9z2/IMGh+ASt4oBNmA==;EndpointSuffix=core.windows.net
+            - Azure_StorageConnectionString=your-blob-storage-connection
         networks:
             - nt.realestate
 volumes:
