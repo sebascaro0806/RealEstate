@@ -44,8 +44,9 @@ namespace RealEstate.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// Retrieves all building properties.
+        /// Retrieves a collection of building properties based on the provided filter criteria.
         /// </summary>
+        /// <param name="filter">The filter criteria to apply.</param>
         /// <returns>A collection of building properties.</returns>
         public async Task<IEnumerable<BuildingProperty>> GetBuildingProperties(BuildingPropertyFilter filter)
         {

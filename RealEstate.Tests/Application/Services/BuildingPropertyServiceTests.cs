@@ -83,6 +83,9 @@ namespace RealEstate.Tests.Application.Services
             Assert.IsTrue(result.All(bp => buildingPropertyDTOs.Any(dto => dto.Id == bp.Id && dto.Name == bp.Name)));
         }
 
+        /// <summary>
+        /// Test for the CreateBuildingProperty function in the service.
+        /// </summary>
         [Test]
         public async Task CreateBuildingProperty_ValidInput_ReturnsBuildingPropertyDTO()
         {
@@ -115,6 +118,10 @@ namespace RealEstate.Tests.Application.Services
             Assert.IsNotNull(result);
         }
 
+        /// <summary>
+        /// Test for the AddImageToBuildingProperty function when the property exists.
+        /// It should add an image to the property.
+        /// </summary>
         [Test]
         public async Task AddImageToBuildingProperty_WhenPropertyExists_ShouldAddImageToProperty()
         {
@@ -142,6 +149,10 @@ namespace RealEstate.Tests.Application.Services
             Assert.That(buildingProperty.BuildingPropertiesImages.Count, Is.EqualTo(1));
         }
 
+        /// <summary>
+        /// Test for the AddImageToBuildingProperty function when the property exists and the images property is null.
+        /// It should add an image to the property.
+        /// </summary>
         [Test]
         public async Task AddImageToBuildingProperty_WhenPropertyExists_AndNullImagesProperty_ShouldAddImageToProperty()
         {
@@ -168,6 +179,10 @@ namespace RealEstate.Tests.Application.Services
             Assert.That(buildingProperty.BuildingPropertiesImages.Count, Is.EqualTo(1));
         }
 
+        /// <summary>
+        /// Test for the ChangeBuildingPropertyPrice function when the property exists.
+        /// It should update the price of the property.
+        /// </summary>
         [Test]
         public async Task ChangeBuildingPropertyPrice_WhenPropertyExists_ShouldUpdatePrice()
         {
@@ -190,6 +205,10 @@ namespace RealEstate.Tests.Application.Services
             Assert.That(buildingProperty.Price, Is.EqualTo(newPrice));
         }
 
+        /// <summary>
+        /// Test for the UpdateBuildingProperty function when the property exists.
+        /// It should update the details of the property.
+        /// </summary>
         [Test]
         public async Task UpdateBuildingProperty_WhenPropertyExists_ShouldUpdatePropertyDetails()
         {

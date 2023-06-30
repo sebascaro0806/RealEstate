@@ -1,5 +1,8 @@
 ﻿namespace RealEstate.Domain.Filters
 {
+    /// <summary>
+    /// Represents the filter criteria for querying building properties.
+    /// </summary>
     public class BuildingPropertyFilter
     {
         public string? Name { get; set; }

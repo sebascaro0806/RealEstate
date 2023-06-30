@@ -2,19 +2,23 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Moq;
-using RealEstate.Infrastructure.ExternalServices.Storage;
 using RealEstate.Infrastructure.ExternalServices.Storage.Azure;
 using System.Text;
-using System.Threading;
 
 namespace RealEstate.Tests.ExternalServices
 {
+    /// <summary>
+    /// Unit tests for the <see cref="AzureStorageServiceTests"/> class.
+    /// </summary>
     [TestFixture]
     public class AzureStorageServiceTests
     {
         private AzureStorageService _azureStorageService;
         private Mock<BlobServiceClient> _mockBlobServiceClient;
 
+        /// <summary>
+        /// Initial setup that runs before each test.
+        /// </summary>
         [SetUp]
         public void SetUp()
         {
@@ -22,6 +26,10 @@ namespace RealEstate.Tests.ExternalServices
             _azureStorageService = new AzureStorageService(_mockBlobServiceClient.Object);
         }
 
+        /// <summary>
+        /// Test for the UploadFileAsync function in the AzureStorageService.
+        /// It should upload a file to Azure Blob Storage and return the file URI.
+        /// </summary>
         [Test]
         public async Task UploadFileAsync_UploadsFileToAzureBlobStorage()
         {

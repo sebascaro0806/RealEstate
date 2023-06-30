@@ -10,6 +10,9 @@ using System.Net;
 
 namespace RealEstate.Tests.API.Middleware
 {
+    /// <summary>
+    /// Unit tests for the <see cref="ExceptionMiddleware"/> class.
+    /// </summary>
     [TestFixture]
     public class ExceptionMiddlewareTests
     {
@@ -18,6 +21,9 @@ namespace RealEstate.Tests.API.Middleware
         private RequestDelegate _next;
         private HttpContext _httpContext;
 
+        /// <summary>
+        /// Initial setup that runs before each test.
+        /// </summary>
         [SetUp]
         public void Setup()
         {
@@ -25,6 +31,10 @@ namespace RealEstate.Tests.API.Middleware
             _httpContext = new DefaultHttpContext();
         }
 
+        /// <summary>
+        /// Tests the <see cref="ExceptionMiddleware.InvokeAsync"/> method when a <see cref="NotFoundException"/> is thrown.
+        /// It should return a NotFound response with the corresponding error message.
+        /// </summary>
         [Test]
         public async Task InvokeAsync_WithNotFoundException_ReturnsNotFoundResponse()
         {
@@ -46,6 +56,10 @@ namespace RealEstate.Tests.API.Middleware
             Assert.That(responseJson.Message, Is.EqualTo(errorMessage));
         }
 
+        /// <summary>
+        /// Tests the <see cref="ExceptionMiddleware.InvokeAsync"/> method when a general <see cref="Exception"/> is thrown.
+        /// It should return an InternalServerError response with a generic error message.
+        /// </summary>
         [Test]
         public async Task InvokeAsync_WithGeneralException_ReturnsInternalServerErrorResponse()
         {

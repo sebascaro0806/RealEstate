@@ -62,8 +62,10 @@ namespace RealEstate.Application.Interfaces
         /// <summary>
         /// Adds an image to a building property.
         /// </summary>
-        /// <param name="propertyId">The property ID.</param>
-        /// <param name="imageData">The image data.</param>
+        /// <param name="propertyId">The ID of the building property.</param>
+        /// <param name="filename">The filename of the image.</param>
+        /// <param name="stream">The stream containing the image data.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
         public async Task AddImageToBuildingProperty(string propertyId, string filename, Stream stream)
         {
             BuildingProperty property = await _buildingPropertyRepository.GetBuildingPropertyById(Guid.Parse(propertyId));

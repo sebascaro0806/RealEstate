@@ -9,12 +9,18 @@ using System.Text;
 
 namespace RealEstate.Tests.API.Controllers
 {
+    /// <summary>
+    /// Unit test class for the BuildingPropertyController.
+    /// </summary>
     [TestFixture]
     public class BuildingPropertyControllerTests
     {
         private Mock<IBuildingPropertyService> _buildingPropertyServiceMock;
         private BuildingPropertyController _controller;
 
+        /// <summary>
+        /// Initial setup that runs before each test.
+        /// </summary>
         [SetUp]
         public void Setup()
         {
@@ -22,6 +28,9 @@ namespace RealEstate.Tests.API.Controllers
             _controller = new BuildingPropertyController(_buildingPropertyServiceMock.Object);
         }
 
+        /// <summary>
+        /// Test method to verify if GetProperties action returns an OkResult.
+        /// </summary>
         [Test]
         public async Task GetProperties_ReturnsOkResult()
         {
@@ -35,6 +44,9 @@ namespace RealEstate.Tests.API.Controllers
             Assert.IsInstanceOf<OkObjectResult>(result);
         }
 
+        /// <summary>
+        /// Test method to verify if CreateProperty action returns a CreatedResult.
+        /// </summary>
         [Test]
         public async Task CreateProperty_ReturnsCreatedResult()
         {
@@ -49,6 +61,9 @@ namespace RealEstate.Tests.API.Controllers
             Assert.IsInstanceOf<CreatedResult>(result);
         }
 
+        /// <summary>
+        /// Test method to verify if AddPropertyImage action returns a CreatedResult.
+        /// </summary>
         [Test]
         public async Task AddPropertyImage_ReturnsCreatedResult()
         {
@@ -67,6 +82,9 @@ namespace RealEstate.Tests.API.Controllers
             Assert.IsInstanceOf<CreatedResult>(result);
         }
 
+        /// <summary>
+        /// Test method to verify if ChangePropertyPrice action returns a NoContentResult.
+        /// </summary>
         [Test]
         public async Task ChangePropertyPrice_ReturnsNoContentResult()
         {
@@ -82,6 +100,9 @@ namespace RealEstate.Tests.API.Controllers
             Assert.IsInstanceOf<NoContentResult>(result);
         }
 
+        /// <summary>
+        /// Test method to verify if UpdateBuildingProperty action returns a NoContentResult.
+        /// </summary>
         [Test]
         public async Task UpdateBuildingProperty_ReturnsNoContentResult()
         {

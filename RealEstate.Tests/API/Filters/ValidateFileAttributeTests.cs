@@ -8,12 +8,18 @@ using RealEstate.API.Filters;
 
 namespace RealEstate.Tests.API.Filters
 {
+    /// <summary>
+    /// Unit test class for the ValidateFileAttribute.
+    /// </summary>
     [TestFixture]
     public class ValidateFileAttributeTests
     {
         private ValidateFileAttribute _attribute;
         private ActionExecutingContext _context;
 
+        /// <summary>
+        /// Initial setup that runs before each test.
+        /// </summary>
         [SetUp]
         public void Setup()
         {
@@ -31,7 +37,9 @@ namespace RealEstate.Tests.API.Filters
             );
         }
 
-
+        /// <summary>
+        /// Test method to verify if OnActionExecutionAsync returns the next delegate when provided with a valid file.
+        /// </summary>
         [Test]
         public async Task OnActionExecutionAsync_WithValidFile_ReturnsNextDelegate()
         {
@@ -49,6 +57,9 @@ namespace RealEstate.Tests.API.Filters
             Assert.IsNull(_context.Result);
         }
 
+        /// <summary>
+        /// Test method to verify if OnActionExecutionAsync returns BadRequestObjectResult when provided with a file with an invalid extension.
+        /// </summary>
         [Test]
         public async Task OnActionExecutionAsync_WithInvalidFileExtension_ReturnsBadRequest()
         {
@@ -66,6 +77,9 @@ namespace RealEstate.Tests.API.Filters
             Assert.IsInstanceOf<BadRequestObjectResult>(_context.Result);
         }
 
+        /// <summary>
+        /// Test method to verify if OnActionExecutionAsync returns BadRequestObjectResult when provided with a file exceeding the maximum file size.
+        /// </summary>
         [Test]
         public async Task OnActionExecutionAsync_WithInvalidFileSize_ReturnsBadRequest()
         {
@@ -85,6 +99,9 @@ namespace RealEstate.Tests.API.Filters
             Assert.IsInstanceOf<BadRequestObjectResult>(_context.Result);
         }
 
+        /// <summary>
+        /// Test method to verify if OnActionExecutionAsync returns BadRequestObjectResult when no file is found.
+        /// </summary>
         [Test]
         public async Task OnActionExecutionAsync_WithNotFoundFile_ReturnsBadRequest()
         {
@@ -96,6 +113,9 @@ namespace RealEstate.Tests.API.Filters
             Assert.IsInstanceOf<BadRequestObjectResult>(_context.Result);
         }
 
+        /// <summary>
+        /// Test method to verify if OnActionExecutionAsync returns BadRequestObjectResult when a null file is provided.
+        /// </summary>
         [Test]
         public async Task OnActionExecutionAsync_WithNullFile_ReturnsBadRequest()
         {

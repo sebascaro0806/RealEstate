@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using Moq;
 using RealEstate.Application.DTOs.Owner;
-using RealEstate.Application.Interfaces;
 using RealEstate.Application.Services;
 using RealEstate.Domain.Interfaces;
 
 namespace RealEstate.Tests.Application.Services
 {
+    /// <summary>
+    /// Represents a set of unit tests for the OwnerServiceTests class.
+    /// </summary>
     [TestFixture]
     public class OwnerServiceTests
     {
@@ -14,6 +16,9 @@ namespace RealEstate.Tests.Application.Services
         private Mock<IMapper> _mapperMock;
         private OwnerService _service;
 
+        /// <summary>
+        /// Initial setup that runs before each test.
+        /// </summary>
         [SetUp]
         public void Setup()
         {
@@ -22,6 +27,10 @@ namespace RealEstate.Tests.Application.Services
             _service = new OwnerService(_repositoryMock.Object, _mapperMock.Object);
         }
 
+        /// <summary>
+        /// Test for the GetOwners function in the service.
+        /// It should return a list of OwnerDTOs.
+        /// </summary>
         [Test]
         public async Task GetOwners_ShouldReturnListOfOwnerDTOs()
         {
@@ -46,6 +55,10 @@ namespace RealEstate.Tests.Application.Services
             Assert.That(result.Count(), Is.EqualTo(owners.Count));
         }
 
+        /// <summary>
+        /// Test for the CreateOwner function in the service.
+        /// It should create a new owner and return an OwnerDTO.
+        /// </summary>
         [Test]
         public async Task CreateOwner_ShouldCreateNewOwnerAndReturnOwnerDTO()
         {

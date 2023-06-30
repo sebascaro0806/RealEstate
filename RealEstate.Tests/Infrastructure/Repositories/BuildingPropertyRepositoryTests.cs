@@ -140,7 +140,9 @@ namespace RealEstate.Tests.Infrastructure.Repositories
             }
         }
 
-
+        /// <summary>
+        /// Tests the GetBuildingProperties method and verifies if it returns all the building properties.
+        /// </summary>
         [Test]
         public async Task GetBuildingProperties_ReturnsAllBuildingPropertiesWithImages()
         {

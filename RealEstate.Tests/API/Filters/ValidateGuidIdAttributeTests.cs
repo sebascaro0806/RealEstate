@@ -7,12 +7,18 @@ using RealEstate.API.Filters;
 
 namespace RealEstate.Tests.API.Filters
 {
+    /// <summary>
+    /// Unit tests for the <see cref="ValidateGuidIdAttribute"/> class.
+    /// </summary>
     [TestFixture]
     public class ValidateGuidIdAttributeTests
     {
         private ValidateGuidIdAttribute _attribute;
         private ActionExecutingContext _context;
 
+        /// <summary>
+        /// Initial setup that runs before each test.
+        /// </summary>
         [SetUp]
         public void Setup()
         {
@@ -30,6 +36,10 @@ namespace RealEstate.Tests.API.Filters
             );
         }
 
+        /// <summary>
+        /// Tests the <see cref="ValidateGuidIdAttribute.OnActionExecutionAsync"/> method when a valid GUID is provided.
+        /// It should return the next delegate without setting a result.
+        /// </summary>
         [Test]
         public async Task OnActionExecutionAsync_WithValidGuidId_ReturnsNextDelegate()
         {
@@ -44,6 +54,10 @@ namespace RealEstate.Tests.API.Filters
             Assert.IsNull(_context.Result);
         }
 
+        /// <summary>
+        /// Tests the <see cref="ValidateGuidIdAttribute.OnActionExecutionAsync"/> method when an invalid GUID is provided.
+        /// It should return a BadRequestObjectResult.
+        /// </summary>
         [Test]
         public async Task OnActionExecutionAsync_WithInvalidGuidId_ReturnsBadRequest()
         {

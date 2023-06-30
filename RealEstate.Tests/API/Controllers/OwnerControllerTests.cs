@@ -6,12 +6,18 @@ using RealEstate.Application.Interfaces;
 
 namespace RealEstate.Tests.API.Controllers
 {
+    /// <summary>
+    /// Unit test class for the OwnerController.
+    /// </summary>
     [TestFixture]
     public class OwnerControllerTests
     {
         private Mock<IOwnerService> _ownerServiceMock;
         private OwnerController _controller;
 
+        /// <summary>
+        /// Initial setup that runs before each test.
+        /// </summary>
         [SetUp]
         public void Setup()
         {
@@ -19,6 +25,9 @@ namespace RealEstate.Tests.API.Controllers
             _controller = new OwnerController(_ownerServiceMock.Object);
         }
 
+        /// <summary>
+        /// Test method to verify if CreateOwner action returns an OkResult.
+        /// </summary>
         [Test]
         public async Task CreateOwner_ReturnsOkResult()
         {
@@ -32,6 +41,9 @@ namespace RealEstate.Tests.API.Controllers
             Assert.IsInstanceOf<OkObjectResult>(result);
         }
 
+        /// <summary>
+        /// Test method to verify if GetOwners action returns an OkResult.
+        /// </summary>
         [Test]
         public async Task GetOwners_ReturnsOkResult()
         {

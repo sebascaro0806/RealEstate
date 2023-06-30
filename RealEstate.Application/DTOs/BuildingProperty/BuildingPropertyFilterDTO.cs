@@ -1,5 +1,8 @@
 ﻿namespace RealEstate.Application.DTOs.BuildingProperty
-{ 
+{
+    /// <summary>
+    /// Represents the filter criteria for querying building properties.
+    /// </summary>
     public class BuildingPropertyFilterDTO
     {
         public string? Name { get; set; }
@@ -12,6 +15,9 @@
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BuildingPropertyFilterDTO"/> class.
+        /// </summary>
         public BuildingPropertyFilterDTO()
         {
             PageNumber = 1;
