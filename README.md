@@ -15,4 +15,4 @@ docker-compose up
 
 ```
 
-4. Una vez que los contenedores estén en ejecución, puedes acceder a la API a través de http://localhost:80/swagger/index.html.
+4. Una vez que los contenedores estén en ejecución, puedes acceder a la API a través de http://localhost:8003/swagger/index.html.
